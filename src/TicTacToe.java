@@ -25,7 +25,7 @@ public class TicTacToe {
             return board;
         }
 
-        private GameConfig(Integer boardSize, Integer winConfig){
+        public GameConfig(Integer boardSize, Integer winConfig){
             this.boardSize=boardSize;
             this.winConfig=winConfig;
             this.board=new String[boardSize][boardSize];
@@ -82,6 +82,131 @@ public class TicTacToe {
     private static boolean checkWinningConfig(GameConfig game){
         return horizontalCheck(game) || verticalCheck(game) || diagonalCheck(game);
     }
+
+    /**
+     * Returns the winning mark ('X' or 'O') if there is a winner, null otherwise
+     * @param game GameConfig object containing the board state
+     * @return String representing the winning mark ('X' or 'O'), or null if no winner
+     */
+    public static String hasWinner(GameConfig game){
+        String winner = getHorizontalWinner(game);
+        if(winner != null) return winner;
+        winner = getVerticalWinner(game);
+        if(winner != null) return winner;
+        winner = getDiagonalWinner(game);
+        if(winner != null) return winner;
+        return null;
+    }
+
+    /**
+     * Get horizontal winner if exists
+     */
+    private static String getHorizontalWinner(GameConfig game){
+        for(int i=0;i<game.getBoardSize();i++){
+            int count=0;
+            String curr="";
+            for(int j=0;j< game.getBoardSize();j++){
+                if(count>=game.getWinConfig()){
+                    return curr;
+                }
+                if(game.getBoard()[i][j]==null){
+                    curr="";
+                    count=0;
+                }else{
+                    if(!curr.isEmpty() && curr.equals(game.getBoard()[i][j])){
+                        count++;
+                    }else{
+                        curr=game.getBoard()[i][j];
+                        count=1;
+                    }
+                }
+            }
+            if(count>=game.getWinConfig()){
+                return curr;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get vertical winner if exists
+     */
+    private static String getVerticalWinner(GameConfig game){
+        for(int j=0;j<game.getBoardSize();j++){
+            int count=0;
+            String curr="";
+            for(int i=0;i< game.getBoardSize();i++){
+                if(count>=game.getWinConfig()){
+                    return curr;
+                }
+                if(game.getBoard()[i][j]==null){
+                    curr="";
+                    count=0;
+                }else{
+                    if(!curr.isEmpty() && curr.equals(game.getBoard()[i][j])){
+                        count++;
+                    }else{
+                        curr=game.getBoard()[i][j];
+                        count=1;
+                    }
+                }
+            }
+            if(count>=game.getWinConfig()){
+                return curr;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get diagonal winner if exists
+     */
+    private static String getDiagonalWinner(GameConfig game){
+        int count=0;
+        String curr="";
+        for(int i=0,j=0;i< game.getBoardSize() && j< game.getBoardSize(); i++,j++){
+            if(count>=game.getWinConfig()){
+                return curr;
+            }
+            if(game.getBoard()[i][j]==null){
+                curr="";
+                count=0;
+            }else{
+                if(!curr.isEmpty() && curr.equals(game.getBoard()[i][j])){
+                    count++;
+                }else{
+                    curr=game.getBoard()[i][j];
+                    count=1;
+                }
+            }
+        }
+        if(count>=game.getWinConfig()){
+            return curr;
+        }
+        count=0;
+        curr="";
+        for(int i=0,j=game.getBoardSize()-1;i< game.getBoardSize() && j>= 0; i++,j--){
+            if(count>=game.getWinConfig()){
+                return curr;
+            }
+            if(game.getBoard()[i][j]==null){
+                curr="";
+                count=0;
+            }else{
+                if(!curr.isEmpty() && curr.equals(game.getBoard()[i][j])){
+                    count++;
+                }else{
+                    curr=game.getBoard()[i][j];
+                    count=1;
+                }
+            }
+        }
+        if(count>=game.getWinConfig()){
+            return curr;
+        }
+        return null;
+    }
+
 
     /**
      * Check horizontally in board whether there is continuous sequence of same character and count is >= winning conf
@@ -304,7 +429,7 @@ public class TicTacToe {
             row=Integer.valueOf(reader.readLine());
             System.out.println("Enter column (starts with 0):");
             column=Integer.valueOf(reader.readLine());
-            if(isValidMove(game,comp,row,column)){
+            if(isValidMove(game,player,row,column)){
                 makeMove(game,player,row,column);
                 if(!isGameOver(game)){
                     computerMove(game,comp,player);
