@@ -24,3 +24,23 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# >>> ExecuteSpec — added missing vendored-path ignores at clone time (see VendoredPathGuard)
+node_modules/
+venv/
+.venv/
+__pycache__/
+dist/
+build/
+target/
+.next/
+.gradle/
+coverage/
+bower_components/
+vendor/
+.vscode/
+.pytest_cache/
+.mypy_cache/
+.tox/
+.nyc_output/
+# <<< ExecuteSpec
