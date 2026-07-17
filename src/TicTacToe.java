@@ -84,6 +84,74 @@ public class TicTacToe {
     }
 
     /**
+     * Check every row, column, and both diagonals for a winning line.
+     * Skips cells with '\0' or ' '. Returns true on the first winning line found.
+     * @param board char[][] game board
+     * @return true if any row, column, or diagonal is all the same non-empty char
+     */
+    public static boolean hasWinner(char[][] board) {
+        if (board == null || board.length == 0) return false;
+        int n = board.length;
+
+        // Check rows
+        for (int i = 0; i < n; i++) {
+            if (board[i] == null || board[i].length != n) continue;
+            char first = board[i][0];
+            if (first == '\0' || first == ' ') continue;
+            boolean win = true;
+            for (int j = 1; j < n; j++) {
+                if (board[i][j] != first) {
+                    win = false;
+                    break;
+                }
+            }
+            if (win) return true;
+        }
+
+        // Check columns
+        for (int j = 0; j < n; j++) {
+            char first = board[0][j];
+            if (first == '\0' || first == ' ') continue;
+            boolean win = true;
+            for (int i = 1; i < n; i++) {
+                if (board[i] == null || board[i].length != n || board[i][j] != first) {
+                    win = false;
+                    break;
+                }
+            }
+            if (win) return true;
+        }
+
+        // Check main diagonal (top-left to bottom-right)
+        char first = board[0][0];
+        if (first != '\0' && first != ' ') {
+            boolean win = true;
+            for (int i = 1; i < n; i++) {
+                if (board[i] == null || board[i].length != n || board[i][i] != first) {
+                    win = false;
+                    break;
+                }
+            }
+            if (win) return true;
+        }
+
+        // Check anti-diagonal (top-right to bottom-left)
+        first = board[0][n - 1];
+        if (first != '\0' && first != ' ') {
+            boolean win = true;
+            for (int i = 1; i < n; i++) {
+                if (board[i] == null || board[i].length != n || board[i][n - 1 - i] != first) {
+                    win = false;
+                    break;
+                }
+            }
+            if (win) return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Check horizontally in board whether there is continuous sequence of same character and count is >= winning conf
      * @param @GameConfig(boardSize, winConfig, board[][])
      * @return boolean
